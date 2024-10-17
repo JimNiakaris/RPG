@@ -10,9 +10,13 @@ namespace DotNet_RPG.Services.CharacterService
             new Character(),
             new Character{Id = 1 ,Name = "Frodo"}
         };
-        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)  // async asynchronous calls for multithreaded application and faster responses 
+
+        // async asynchronous calls for multithreaded application and faster responses 
+        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)   
         {
-            var serviceResponse = new ServiceResponse<List<Character>>();
+            //we can pass as data to the service response, since it is a generic property, the list of characters
+            // the two other properties have default values, but we can use them to pass error messages during runtime
+            var serviceResponse = new ServiceResponse<List<Character>>(); 
             Charachers.Add(newCharacter);
             serviceResponse.Data = Charachers;
             return serviceResponse;
