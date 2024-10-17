@@ -10,20 +10,25 @@ namespace DotNet_RPG.Services.CharacterService
             new Character(),
             new Character{Id = 1 ,Name = "Frodo"}
         };
-        public async Task<List<Character>> AddCharacter(Character newCharacter)  // async asynchronous calls for multithreaded application and faster responses 
+        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)  // async asynchronous calls for multithreaded application and faster responses 
         {
+            var serviceResponse = new ServiceResponse<List<Character>>();
             Charachers.Add(newCharacter);
-            return Charachers;
+            serviceResponse.Data = Charachers;
+            return serviceResponse;
         }
 
-        public async Task<List<Character>> GetAllCharacters()
+        public async Task<ServiceResponse<List<Character>>> GetAllCharacters()
         {
-            return Charachers;
+            return new ServiceResponse<List<Character>> { Data = Charachers};
         }
 
-        public async Task<Character> GetCharacter(int id)
+        public async Task<ServiceResponse<Character>> GetCharacter(int id)
         {
-            return Charachers.FirstOrDefault(c => c.Id == id);
+            var serviceResponse = new ServiceResponse<Character>();
+            var character = Charachers.FirstOrDefault(c => c.Id == id);
+            serviceResponse.Data = character;
+            return serviceResponse;
         }
     }
 }

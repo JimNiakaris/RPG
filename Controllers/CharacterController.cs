@@ -16,18 +16,18 @@ namespace DotNet_RPG.Controllers
         }
 
         [HttpGet("GetAll")] //routing attributes to specify which http get method is being used 
-        public  async Task<ActionResult<List<Character>>> Get()
+        public  async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
         {
             return Ok(await _characterService.GetAllCharacters());
         }
 
         [HttpGet("{id}")] //routing attributes to specify which http get method is being used... use {} because we pass a parameter
-        public async Task<ActionResult<Character>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacter(id));
         }
         [HttpPost]
-        public async Task<ActionResult<List<Character>>> AddCharacter (Character newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacter (Character newCharacter)
         {
            return Ok(await _characterService.AddCharacter(newCharacter));
         }
