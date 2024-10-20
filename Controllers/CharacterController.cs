@@ -1,4 +1,5 @@
-﻿using DotNet_RPG.Services.CharacterService;
+﻿using DotNet_RPG.DTO.Character;
+using DotNet_RPG.Services.CharacterService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,18 +17,18 @@ namespace DotNet_RPG.Controllers
         }
 
         [HttpGet("GetAll")] //routing attributes to specify which http get method is being used 
-        public  async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
+        public  async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
         {
             return Ok(await _characterService.GetAllCharacters());
         }
 
         [HttpGet("{id}")] //routing attributes to specify which http get method is being used... use {} because we pass a parameter
-        public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacter(id));
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacter (Character newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter (GetCharacterDTO newCharacter)
         {
            return Ok(await _characterService.AddCharacter(newCharacter));
         }
