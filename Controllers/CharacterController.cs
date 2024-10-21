@@ -28,7 +28,7 @@ namespace DotNet_RPG.Controllers
             return Ok(await _characterService.GetCharacter(id));
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter (GetCharacterDTO newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter (AddCharacterDTO newCharacter)
         {
            return Ok(await _characterService.AddCharacter(newCharacter));
         }
