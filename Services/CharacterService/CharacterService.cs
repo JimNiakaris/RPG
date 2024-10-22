@@ -12,25 +12,25 @@ namespace DotNet_RPG.Services.CharacterService
             new Character(),
             new Character{Id = 1 ,Name = "Frodo"}
         };
-        
+
         private readonly IMapper _mapper;
 
-        public CharacterService(IMapper mapper) 
+        public CharacterService(IMapper mapper)
         {
             _mapper = mapper;
         }
 
         // async asynchronous calls for multithreaded application and faster responses 
-        public async Task<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO newCharacter)   
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO newCharacter)
         {
             //we can pass as data to the service response, since it is a generic property, the list of characters
             // the two other properties have default values, but we can use them to pass error messages during runtime
-            var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>(); 
+            var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
             Character character = _mapper.Map<Character>(newCharacter);
             character.Id = characters.Max(x => x.Id) + 1;
             //the Characters type is Charecter, but the newCharacter type is AddCharacterDTO
             //so bellow we map the Character type to AddCharacterDTO type
-            characters.Add(character); 
+            characters.Add(character);
             // the charactes type is Character, and we use lamda to map every charactes c in the list
             // with the _mapper to the dto GetCharacterDTO, and the method ToList because characters is a list
             serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
@@ -39,9 +39,9 @@ namespace DotNet_RPG.Services.CharacterService
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters()
         {
-            return new ServiceResponse<List<GetCharacterDTO>> 
-            { 
-                Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList() 
+            return new ServiceResponse<List<GetCharacterDTO>>
+            {
+                Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList()
             };
         }
 
@@ -83,6 +83,25 @@ namespace DotNet_RPG.Services.CharacterService
 
             return response;
 
+        }
+
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> DeleteCharacter(int id)
+        {
+            ServiceResponse<List<GetCharacterDTO>> response = new ServiceResponse<List<GetCharacterDTO>>();
+
+            try
+            {
+                Character character = characters.First(c => c.Id == id);
+                characters.Remove(character);
+                response.Data = characters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                response.Success=false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }
