@@ -53,10 +53,35 @@ namespace DotNet_RPG.Services.CharacterService
             return serviceResponse;
         }
 
-        public Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updateCharacter)
+        public async Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updateCharacter)
         {
-            var serviceResponse = new ServiceResponse<UpdateCharacterDTO>();
-            Character character = characters.FirstOrDefault(c => c.Id == updateCharacter.Id);
+            ServiceResponse<GetCharacterDTO> response
+               = new ServiceResponse<GetCharacterDTO>();
+
+            try
+            {
+                Character character = characters.FirstOrDefault(c => c.Id == updateCharacter.Id);
+
+                //_mapper.Map(updateCharacter, character); //do this instead of that bellow
+                //if we want to update only specific properties it's better not to use automapper
+
+                character.Name = updateCharacter.Name;
+                character.Strenght = updateCharacter.Strenght;
+                character.Deffence = updateCharacter.Deffence;
+                character.HitPoints = updateCharacter.HitPoints;
+                character.Class = updateCharacter.Class;
+                character.Intelligence = updateCharacter.Intelligence;
+
+                response.Data = _mapper.Map<GetCharacterDTO>(character);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+            }
+
+            return response;
 
         }
     }

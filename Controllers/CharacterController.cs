@@ -11,13 +11,13 @@ namespace DotNet_RPG.Controllers
     {
         private readonly ICharacterService _characterService; //dependency injection of the character service into the controller
 
-        public CharacterController(ICharacterService characterService) 
+        public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
         }
 
         [HttpGet("GetAll")] //routing attributes to specify which http get method is being used 
-        public  async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
         {
             return Ok(await _characterService.GetAllCharacters());
         }
@@ -28,9 +28,20 @@ namespace DotNet_RPG.Controllers
             return Ok(await _characterService.GetCharacter(id));
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter (AddCharacterDTO newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter(AddCharacterDTO newCharacter)
         {
-           return Ok(await _characterService.AddCharacter(newCharacter));
+            return Ok(await _characterService.AddCharacter(newCharacter));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> UpdateCharachter(UpdateCharacterDTO updatedCharacter)
+        {
+            var response = await _characterService.UpdateCharacter(updatedCharacter);
+            if (response.Data == null) 
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }
