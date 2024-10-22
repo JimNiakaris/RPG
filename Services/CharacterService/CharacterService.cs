@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using DotNet_RPG.Data;
 using DotNet_RPG.DTO.Character;
 using DotNet_RPG.Models;
 
@@ -15,9 +16,11 @@ namespace DotNet_RPG.Services.CharacterService
 
         private readonly IMapper _mapper;
 
-        public CharacterService(IMapper mapper)
+        private readonly DataContext _context;
+        public CharacterService(IMapper mapper,DataContext context) //dbcontext dependence injection
         {
             _mapper = mapper;
+            _context = context;
         }
 
         // async asynchronous calls for multithreaded application and faster responses 

@@ -1,5 +1,5 @@
 global using DotNet_RPG.Models;// using the global directive in program enables us to use the Models everywhere without using the directive in every reference
-using DotNet_RPG;
+using DotNet_RPG.Data;
 using DotNet_RPG.Services.CharacterService;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);

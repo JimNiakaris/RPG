@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DotNet_RPG
+namespace DotNet_RPG.Data
 {
     public class DataContext : DbContext
     {
