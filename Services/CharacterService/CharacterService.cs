@@ -3,17 +3,14 @@ using AutoMapper;
 using DotNet_RPG.Data;
 using DotNet_RPG.DTO.Character;
 using DotNet_RPG.Models;
+using Microsoft.EntityFrameworkCore; //use this insted of using System.Data.Entity; because it causes an error 
+                                     //System.InvalidOperationException: The source IQueryable doesn't implement IDbAsyncEnumerable
 
 namespace DotNet_RPG.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-        private static List<Character> characters = new List<Character>
-        {
-            new Character(),
-            new Character{Id = 1 ,Name = "Frodo"}
-        };
-
+      
         private readonly IMapper _mapper;
 
         private readonly DataContext _context;
@@ -30,29 +27,34 @@ namespace DotNet_RPG.Services.CharacterService
             // the two other properties have default values, but we can use them to pass error messages during runtime
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
             Character character = _mapper.Map<Character>(newCharacter);
-            character.Id = characters.Max(x => x.Id) + 1;
             //the Characters type is Charecter, but the newCharacter type is AddCharacterDTO
             //so bellow we map the Character type to AddCharacterDTO type
-            characters.Add(character);
+            _context.Character.Add(character);
+            await _context.SaveChangesAsync(); //with he savechanges we write the new character to the databases
+
             // the charactes type is Character, and we use lamda to map every charactes c in the list
             // with the _mapper to the dto GetCharacterDTO, and the method ToList because characters is a list
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            serviceResponse.Data =  await _context
+                .Character
+                .Select(c => _mapper.Map<GetCharacterDTO>(c))
+                .ToListAsync(); //implementation with entity framework
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters()
         {
-            return new ServiceResponse<List<GetCharacterDTO>>
-            {
-                Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList()
-            };
+            var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
+            var dbCharacters = await _context.Character.ToListAsync();
+
+            serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDTO>> GetCharacter(int id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
-            var character = characters.FirstOrDefault(c => c.Id == id);
-            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(character);
+            var dbCharacter = await _context.Character.FirstOrDefaultAsync(c => c.Id == id);
+            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(dbCharacter);
             return serviceResponse;
         }
 
@@ -63,7 +65,14 @@ namespace DotNet_RPG.Services.CharacterService
 
             try
             {
-                Character character = characters.FirstOrDefault(c => c.Id == updateCharacter.Id);
+                var character = 
+                    await _context
+                    .Character
+                    .FirstOrDefaultAsync(c => c.Id == updateCharacter.Id);
+                if (character == null)
+                {
+                    throw new Exception($" Character with id '{updateCharacter.Id}' does not exist");
+                }
 
                 //_mapper.Map(updateCharacter, character); //do this instead of that bellow
                 //if we want to update only specific properties it's better not to use automapper
@@ -75,7 +84,11 @@ namespace DotNet_RPG.Services.CharacterService
                 character.Class = updateCharacter.Class;
                 character.Intelligence = updateCharacter.Intelligence;
 
+                await _context.SaveChangesAsync();
+
                 response.Data = _mapper.Map<GetCharacterDTO>(character);
+
+                
             }
             catch (Exception ex)
             {
@@ -94,9 +107,19 @@ namespace DotNet_RPG.Services.CharacterService
 
             try
             {
-                Character character = characters.First(c => c.Id == id);
-                characters.Remove(character);
-                response.Data = characters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();
+                var character = await _context.Character.FirstOrDefaultAsync(c => c.Id == id);
+                if (character == null)
+                {
+                    throw new Exception($" Character with id '{id}' does not exist");
+                }
+                _context.Remove(character);
+
+                await _context.SaveChangesAsync();
+
+                response.Data = 
+                    await _context
+                    .Character
+                    .Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToListAsync();
 
             }
             catch (Exception ex)
