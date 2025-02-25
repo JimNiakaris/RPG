@@ -9,6 +9,6 @@
         public int Deffence { get; set; } = 10;
         public int Intelligence { get; set; } = 10;
         public Rpgclass Class { get; set; } = Rpgclass.Warrior;
-
+        public User? User { get; set; }
     }
 }
