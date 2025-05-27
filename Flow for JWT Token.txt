@@ -1,0 +1,90 @@
+User logs in successfully
+|
+V
+
+AuthRepository.Login() calls CreateToken(user)
+|
+V
+
+Start creating the token
+|
+V
+
+✅ Create Claims
+
+Identify the user uniquely
+
+Examples:
+
+user.Id → ClaimTypes.NameIdentifier
+
+user.Name → ClaimTypes.Name
+|
+V
+
+✅ Get Secret Key from Configuration
+
+From appsettings.json: "appSettings:Token"
+
+Must be a long, random string (>= 64 bytes recommended)
+|
+V
+
+✅ Convert Secret Key to Symmetric Key
+
+Encodes string to bytes
+
+Wrap in SymmetricSecurityKey
+|
+V
+
+✅ Create Signing Credentials
+
+Use the SymmetricSecurityKey
+
+Use HMAC-SHA512 as signing algorithm
+|
+V
+
+✅ Prepare Token Descriptor
+
+ClaimsIdentity ← the claims
+
+Expires ← e.g. DateTime.Now + 1 day
+
+SigningCredentials ← from step 7
+|
+V
+
+✅ Use JwtSecurityTokenHandler to Create the Token
+
+Call CreateToken(tokenDescriptor)
+|
+V
+
+✅ Convert Token to String
+
+Call WriteToken(token)
+
+This produces a compact JWT like:
+eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9...
+|
+V
+
+Return token to client
+
+Client stores it (e.g. localStorage/cookie)
+
+Sends it in future requests:
+Authorization: Bearer <token>
+
+
+| **Step**                | **Purpose**                                          |
+| ----------------------- | ---------------------------------------------------- |
+| **Claims**              | Identify the user in the token                       |
+| **Secret Key**          | Used to sign the token, ensuring authenticity        |
+| **Symmetric Key**       | Converts string to crypto key                        |
+| **Signing Credentials** | Define the signing algorithm (HMAC-SHA512)           |
+| **Token Descriptor**    | Holds all token data (claims, expiry, signing info)  |
+| **Jwt Handler**         | Builds and encodes the final JWT                     |
+| **Token String**        | The token sent to the client, used for authorization |
