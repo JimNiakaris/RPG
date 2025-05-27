@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "S/2vmHsg2As=",
+  "dgSpecHash": "XkC671bv9UY=",
   "success": true,
   "projectFilePath": "C:\\Users\\dimni\\Source\\Repos\\RPG\\DotNet-RPG.csproj",
   "expectedPackageFiles": [
@@ -50,7 +50,10 @@
     "C:\\Users\\dimni\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
+    "C:\\Users\\dimni\\.nuget\\packages\\scrutor\\3.3.0\\scrutor.3.3.0.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore\\7.2.0\\swashbuckle.aspnetcore.7.2.0.nupkg.sha512",
+    "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore.filters\\8.0.3\\swashbuckle.aspnetcore.filters.8.0.3.nupkg.sha512",
+    "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore.filters.abstractions\\8.0.3\\swashbuckle.aspnetcore.filters.abstractions.8.0.3.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\7.2.0\\swashbuckle.aspnetcore.swagger.7.2.0.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\7.2.0\\swashbuckle.aspnetcore.swaggergen.7.2.0.nupkg.sha512",
     "C:\\Users\\dimni\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\7.2.0\\swashbuckle.aspnetcore.swaggerui.7.2.0.nupkg.sha512",
