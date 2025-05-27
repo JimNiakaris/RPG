@@ -1,17 +1,21 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 
 namespace DotNet_RPG.Data
 {
-    public class AuthRepository : IAuthRepository        
+    public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthRepository(DataContext context) 
+        public AuthRepository(DataContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         public async Task<ServiceResponse<string>> Login(string username, string password)
         {
@@ -35,7 +39,7 @@ namespace DotNet_RPG.Data
                 response.Data = CreateToken(user);
             }
 
-                return response;
+            return response;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -56,14 +60,14 @@ namespace DotNet_RPG.Data
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            
+
             response.Data = user.Id;
             return response;
         }
 
         public async Task<bool> UserExists(string username)
         {
-            if(await _context.Users.AnyAsync(u => u.Name.ToLower() == username.ToLower()))
+            if (await _context.Users.AnyAsync(u => u.Name.ToLower() == username.ToLower()))
             {
                 return true;
             }
@@ -82,7 +86,7 @@ namespace DotNet_RPG.Data
             }
         }
 
-        private bool VerifyPasswordHash (string password, byte[] storedSalt, byte[] storedHash)
+        private bool VerifyPasswordHash(string password, byte[] storedSalt, byte[] storedHash)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
@@ -94,7 +98,7 @@ namespace DotNet_RPG.Data
             }
         }
 
-        private string CreateToken (User user)
+        private string CreateToken(User user)
         {
             var claims = new List<Claim>
             {
@@ -102,7 +106,28 @@ namespace DotNet_RPG.Data
                 new Claim(ClaimTypes.Name,user.Name)
             };
 
-            return string.Empty;
+            var appSettingToken = _configuration.GetSection("appSettings:Token").Value;
+            if (appSettingToken is null)
+            {
+                throw new Exception("Appsettings Token is null");
+            }
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingToken));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            SecurityToken token = handler.CreateToken(tokenDescriptor);
+
+            return handler.WriteToken(token);
+
+            
         }
     }
 }

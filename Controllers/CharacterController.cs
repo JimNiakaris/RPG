@@ -1,10 +1,12 @@
 ﻿using DotNet_RPG.DTO.Character;
 using DotNet_RPG.Services.CharacterService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNet_RPG.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")] // enables us to access the controller by the string "api and the name of the controlles which is "Character"
     [ApiController] //attribute that indicates this controller serves http api responses, enables http routing and responses
     public class CharacterController : ControllerBase
