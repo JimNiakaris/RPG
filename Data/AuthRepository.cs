@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 
 namespace DotNet_RPG.Data
 {
@@ -21,14 +22,20 @@ namespace DotNet_RPG.Data
                 response.Success = false;
                 response.Message = "User not Found";
             }
-            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            else if (!VerifyPasswordHash(password, user.PasswordSalt, user.PasswordHash))
             {
                 response.Success = false;
                 response.Message = "Wrong Password";
             }
-            else response.Data= user.Id.ToString();
 
-            return response;
+            // this is going to change and call the CreateToken method
+            //else response.Data= user.Id.ToString(); 
+            else
+            {
+                response.Data = CreateToken(user);
+            }
+
+                return response;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -75,16 +82,27 @@ namespace DotNet_RPG.Data
             }
         }
 
-        private bool VerifyPasswordHash (string password, byte[] passwordSalt, byte[] passwordHash)
+        private bool VerifyPasswordHash (string password, byte[] storedSalt, byte[] storedHash)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 Console.WriteLine("Computed Hash: " + BitConverter.ToString(computedHash));
-                Console.WriteLine("Stored Hash: " + BitConverter.ToString(passwordHash));
-                Console.WriteLine("Stored Salt: " + BitConverter.ToString(passwordSalt));
-                return computedHash.SequenceEqual(passwordHash);
+                Console.WriteLine("Stored Hash: " + BitConverter.ToString(storedHash));
+                Console.WriteLine("Stored Salt: " + BitConverter.ToString(storedSalt));
+                return computedHash.SequenceEqual(storedHash);
             }
+        }
+
+        private string CreateToken (User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim (ClaimTypes.NameIdentifier , user.Id.ToString()),
+                new Claim(ClaimTypes.Name,user.Name)
+            };
+
+            return string.Empty;
         }
     }
 }

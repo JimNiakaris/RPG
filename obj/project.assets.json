@@ -5190,23 +5190,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dimitris.niakaris\\.nuget\\packages\\": {},
+    "C:\\Users\\dimni\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dimitris.niakaris\\source\\repos\\RPG\\DotNet-RPG.csproj",
+      "projectUniqueName": "C:\\Users\\dimni\\Source\\Repos\\RPG\\DotNet-RPG.csproj",
       "projectName": "DotNet-RPG",
-      "projectPath": "C:\\Users\\dimitris.niakaris\\source\\repos\\RPG\\DotNet-RPG.csproj",
-      "packagesPath": "C:\\Users\\dimitris.niakaris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dimitris.niakaris\\source\\repos\\RPG\\obj\\",
+      "projectPath": "C:\\Users\\dimni\\Source\\Repos\\RPG\\DotNet-RPG.csproj",
+      "packagesPath": "C:\\Users\\dimni\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dimni\\Source\\Repos\\RPG\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\dimitris.niakaris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dimni\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5234,7 +5234,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -5288,7 +5288,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
