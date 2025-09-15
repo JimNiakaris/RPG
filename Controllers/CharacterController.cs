@@ -25,7 +25,7 @@ namespace DotNet_RPG.Controllers
             //Attention, the User bellow is not the User model that exists in the database but the User Property of the 
             //Controller Base
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
-            return Ok(await _characterService.GetAllCharacters(userId));
+            return Ok(await _characterService.GetAllCharacters());
         }
 
         [HttpGet("{id}")] //routing attributes to specify which http get method is being used... use {} because we pass a parameter
